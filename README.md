@@ -52,3 +52,10 @@
 >[Criando um README](https://www.makeareadme.com/)
 >
 >[Github Actions Workflow](https://learn.microsoft.com/en-us/dotnet/devops/dotnet-test-github-action)
+
+
+
+### Bugs Model
+
+- Model deixa colocar media negativa
+- Método de Aprovação fala que 5 é reprovado

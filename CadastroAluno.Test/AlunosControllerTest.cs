@@ -14,35 +14,75 @@ namespace CadastroAluno.Test
 {
     public class AlunosControllerTest
     {
-        Mock<IAlunoRepository> _repository;
+        private Mock<IAlunoRepository> _repository;
+        private AlunosController _controller;
 
         public AlunosControllerTest()
         {
             _repository = new Mock<IAlunoRepository>();
+            _controller = new AlunosController(_repository.Object);
+        }
+
+        [Theory]
+        [InlineData("Pedro", "T91")]
+        public async void Atualizar_ExecutaAcao_RetornaOkAction(string nome, string turma)
+        {
+            //Arrange
+            //Aluno aluno = new Aluno();
+            //    aluno.Nome = "Pedro";
+            //    aluno.Turma = "T91";
+            Aluno aluno = new Aluno();
+            //Act
+            var resul = aluno;
+            aluno.AtualizarDados(nome,turma);
+            //Assert
+            Assert.Equal(resul, aluno);
+
+         
+
+        }
+
+        [Theory]
+        [InlineData("Pedro", "T91", 4 )]
+        public async void VerificaAprovacao_ExecutaAcao_RetornaTrueOrFalse(string nome, string turma, double media)
+        {
+            //Arrange
+     
+            Aluno aluno = new Aluno();
+            aluno.Media = 6;
+            //Act
+            var resul = 
+            aluno.VerificaAprovacao();
+            //Assert
+            Assert.Equal(true, resul);
+        }
+        
+        [Theory]
+        [InlineData( 5 )]
+        public async void AtualizarMedia_ExecutaAcao_RetornaTrueOrFalse(double media)
+        {
+            //Arrange
+     
+            Aluno aluno = new Aluno();
+            aluno.Media = 6;
+            //Act
+            var resul = aluno;
+            aluno.AtualizaMedia(media);
+            //Assert
+            Assert.Equal(resul, aluno);
         }
 
         [Fact]
-        public async void GetAluno_ExecutaAcao_RetornaOkAction()
+        public async void Index_ExecutaAcao_RetornaOuNao()
         {
-            //Arrange
-            AlunosController controller = new AlunosController(_repository.Object);
-
-
-
-            Aluno aluno1 = new Aluno("Bueno","T91", 5 );
-
-
-            _repository.Setup(repo => repo.GetAluno(1)).Returns(Task.FromResult(aluno1));
-
+            //Arange
+            var result =_controller.Index();
             //Act
-            var consulta = await controller.Details(1);
-
+            var okResult = Assert.IsType<OkResult>(result);
             //Assert
-            var cli = Assert.IsType<Aluno>(consulta);
-            //var Cliente = Assert.IsType<Cliente>((consulta.Result as OkObjectResult).Value);
-            //Assert.Equal(1 , listaClientes);
-
+            Assert.NotNull(result);
         }
+
 
     }
 }
