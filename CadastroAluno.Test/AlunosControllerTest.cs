@@ -16,6 +16,7 @@ namespace CadastroAluno.Test
     {
         private Mock<IAlunoRepository> _repository;
         private AlunosController _controller;
+        
 
         public AlunosControllerTest()
         {
@@ -34,35 +35,35 @@ namespace CadastroAluno.Test
             Aluno aluno = new Aluno();
             //Act
             var resul = aluno;
-            aluno.AtualizarDados(nome,turma);
+            aluno.AtualizarDados(nome, turma);
             //Assert
             Assert.Equal(resul, aluno);
 
-         
+
 
         }
 
         [Theory]
-        [InlineData("Pedro", "T91", 4 )]
+        [InlineData("Pedro", "T91", 4)]
         public async void VerificaAprovacao_ExecutaAcao_RetornaTrueOrFalse(string nome, string turma, double media)
         {
             //Arrange
-     
+
             Aluno aluno = new Aluno();
             aluno.Media = 6;
             //Act
-            var resul = 
+            var resul =
             aluno.VerificaAprovacao();
             //Assert
             Assert.Equal(true, resul);
         }
-        
+
         [Theory]
-        [InlineData( 5 )]
+        [InlineData(5)]
         public async void AtualizarMedia_ExecutaAcao_RetornaTrueOrFalse(double media)
         {
             //Arrange
-     
+
             Aluno aluno = new Aluno();
             aluno.Media = 6;
             //Act
@@ -75,14 +76,23 @@ namespace CadastroAluno.Test
         [Fact]
         public async void Index_ExecutaAcao_RetornaOuNao()
         {
-            //Arange
-            var result =_controller.Index();
-            //Act
-            var okResult = Assert.IsType<OkResult>(result);
-            //Assert
+            //act
+            var result = await _controller.Index();
+
+            //assert
+            var okResult = Assert.IsType<ViewResult>(result);
+
+
             Assert.NotNull(result);
         }
-
-
+        [Fact]
+        public void CreateAluno_ModelStateValida_ChamaRepositorioUmaVez()
+        {
+            AlunosController controller = new AlunosController(_repository.Object);
+            Aluno alunoValido;
+            _repository.Setup(repo => repo.AddAluno(alunoValido)).Returns(alunoValido);
+            controller.Create(alunoValido);
+            _repository.Verify(repo => repo.AddAluno(alunoValido), Times.Once);
+        }
     }
 }
